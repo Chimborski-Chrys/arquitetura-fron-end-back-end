@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace curso.api.Business.Entities
+﻿namespace curso.api.Business.Entities
 {
     public class Curso
     {

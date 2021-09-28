@@ -15,6 +15,8 @@ using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using curso.api.Infraestruture.Data;
 
 namespace curso.api.Controllers
 {
@@ -94,6 +96,18 @@ namespace curso.api.Controllers
         [ValidacaoModelStateCustomizado]
         public async Task<IActionResult> Registrar(RegistroViewModelInput loginViewModelInput)
         {
+            /**/
+            var optionsBuilder = new DbContextOptionsBuilder<CursoDbContext>();
+            optionsBuilder.UseSqlServer("Server=.;Database=CursoDioApi;Trusted_Connection=True;MultipleActiveResultSets=true");
+            CursoDbContext contexto = new CursoDbContext(optionsBuilder.Options);
+
+            var migracoesPendentes = contexto.Database.GetPendingMigrations();
+
+            if(migracoesPendentes.Count() > 0)
+            {
+                contexto.Database.Migrate();
+            }
+                 /**/
             try
             {
                 var usuario = await _usuarioRepository.ObterUsuarioAsync(loginViewModelInput.Login);

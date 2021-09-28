@@ -7,7 +7,10 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
+using Refit;
+using curso.mvc.web.Services;
 
 namespace curso.mvc.web
 {
@@ -24,7 +27,26 @@ namespace curso.mvc.web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            var clientHandler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; }
+            };
+
+            services.AddRefitClient<IUsuarioService>().ConfigureHttpClient(
+                c =>
+                {
+                    c.BaseAddress = new Uri(Configuration.GetValue<string>("UrlApiCurso"));
+                }).ConfigurePrimaryHttpMessageHandler(c => clientHandler);
+
+            services.AddRefitClient<ICursoService>().ConfigureHttpClient(
+            c =>
+            {
+                c.BaseAddress = new Uri(Configuration.GetValue<string>("UrlApiCurso"));
+            }).ConfigurePrimaryHttpMessageHandler(c => clientHandler);
         }
+
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

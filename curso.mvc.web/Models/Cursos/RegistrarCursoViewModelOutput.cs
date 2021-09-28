@@ -2,12 +2,12 @@
 
 namespace curso.mvc.web.Models.Cursos
 {
-    public class RegistrarCursoViewModelInput
+    public class RegistrarCursoViewModelOutput
     {
-        [Required(ErrorMessage = "Nome do curso é obrigatório")]
+    
         public string Nome { get; set; }
 
-        [Required(ErrorMessage = "Descrição do curso é obrigatória")]
         public string Descricao { get; set; }
+        public string Login { get; set; }
     }
 }
